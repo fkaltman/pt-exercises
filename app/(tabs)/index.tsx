@@ -11,10 +11,10 @@ import {
 const STORAGE_KEY = "@exercises";
 
 const initialExercises = [
-  { id: 1, name: "Push-ups", reps: "3 sets of 15", completed: false },
-  { id: 2, name: "Squats", reps: "3 sets of 20", completed: false },
-  { id: 3, name: "Plank", reps: "3 sets of 30 seconds", completed: false },
-  { id: 4, name: "Lunges", reps: "3 sets of 10 each leg", completed: false },
+  { id: 1, name: "Reverse Kegels", reps: "3 sets of 15", completed: false },
+  { id: 2, name: "Child's Pose Breathing", reps: "3 sets of 20", completed: false },
+  { id: 3, name: "Donkey Kicks", reps: "3 sets of 30 seconds", completed: false },
+  { id: 4, name: "Lumbar Wall Slide", reps: "3 sets of 10 each leg", completed: false },
   { id: 5, name: "Jumping Jacks", reps: "3 sets of 30", completed: false },
   { id: 6, name: "Burpees", reps: "3 sets of 10", completed: false },
   {
@@ -29,9 +29,20 @@ const initialExercises = [
 const index = () => {
   const [exercises, setExercises] = useState(initialExercises);
 
+  // Get formatted current date
+  const getCurrentDate = () => {
+    const date = new Date();
+    const options: Intl.DateTimeFormatOptions = {
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+    };
+    return date.toLocaleDateString("en-US", options);
+  };
+
   // Load exercises from storage on mount
   useEffect(() => {
-    loadExercises();
+    // loadExercises(); // Temporarily disabled to use updated initialExercises
   }, []);
 
   // Save exercises to storage whenever they change
@@ -70,7 +81,7 @@ const index = () => {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.header}>Daily Exercises</Text>
+      <Text style={styles.header}>{getCurrentDate()}</Text>
       <ScrollView style={styles.scrollView}>
         {exercises.map((exercise) => (
           <TouchableOpacity
@@ -114,7 +125,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
   },
   header: {
-    fontSize: 32,
+    fontSize: 28,
     fontWeight: "bold",
     marginBottom: 20,
     color: "#333",
@@ -140,7 +151,7 @@ const styles = StyleSheet.create({
     height: 24,
     borderRadius: 4,
     borderWidth: 2,
-    borderColor: "#4CAF50",
+    borderColor: "#00b9b0",
     marginRight: 16,
     justifyContent: "center",
     alignItems: "center",
@@ -149,7 +160,7 @@ const styles = StyleSheet.create({
     width: 14,
     height: 14,
     borderRadius: 2,
-    backgroundColor: "#4CAF50",
+    backgroundColor: "#00b9b0",
   },
   exerciseInfo: {
     flex: 1,
