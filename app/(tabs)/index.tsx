@@ -1,6 +1,7 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useEffect, useState } from "react";
 import {
+  Image,
   ScrollView,
   StyleSheet,
   Text,
@@ -12,9 +13,24 @@ const STORAGE_KEY = "@exercises";
 
 const initialExercises = [
   { id: 1, name: "Reverse Kegels", reps: "3 sets of 15", completed: false },
-  { id: 2, name: "Child's Pose Breathing", reps: "3 sets of 20", completed: false },
-  { id: 3, name: "Donkey Kicks", reps: "3 sets of 30 seconds", completed: false },
-  { id: 4, name: "Lumbar Wall Slide", reps: "3 sets of 10 each leg", completed: false },
+  {
+    id: 2,
+    name: "Child's Pose Breathing",
+    reps: "3 sets of 20",
+    completed: false,
+  },
+  {
+    id: 3,
+    name: "Donkey Kicks",
+    reps: "3 sets of 30 seconds",
+    completed: false,
+  },
+  {
+    id: 4,
+    name: "Lumbar Wall Slide",
+    reps: "3 sets of 10 each leg",
+    completed: false,
+  },
   { id: 5, name: "Jumping Jacks", reps: "3 sets of 30", completed: false },
   { id: 6, name: "Burpees", reps: "3 sets of 10", completed: false },
   {
@@ -31,18 +47,16 @@ const index = () => {
 
   // Get formatted current date
   const getCurrentDate = () => {
-    const date = new Date();
-    const options: Intl.DateTimeFormatOptions = {
-      year: "numeric",
-      month: "long",
+    return new Date().toLocaleDateString("en-US", {
+      month: "numeric",
       day: "numeric",
-    };
-    return date.toLocaleDateString("en-US", options);
+      year: "2-digit",
+    });
   };
 
   // Load exercises from storage on mount
   useEffect(() => {
-    // loadExercises(); // Temporarily disabled to use updated initialExercises
+    loadExercises();
   }, []);
 
   // Save exercises to storage whenever they change
@@ -81,7 +95,13 @@ const index = () => {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.header}>{getCurrentDate()}</Text>
+      <View style={styles.headerRow}>
+        <Image
+          source={require("../../assets/images/pelvic_power_logo.webp")}
+          style={styles.logo}
+        />
+        <Text style={styles.header}>{getCurrentDate()}</Text>
+      </View>
       <ScrollView style={styles.scrollView}>
         {exercises.map((exercise) => (
           <TouchableOpacity
@@ -120,15 +140,27 @@ const index = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#f5f5f5",
-    paddingTop: 60,
+    backgroundColor: "#00b9b070",
+    paddingTop: 20,
     paddingHorizontal: 20,
   },
+  headerRow: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+    marginBottom: 16,
+  },
+  logo: {
+    width: 48,
+    height: 40,
+    marginRight: 12,
+  },
   header: {
-    fontSize: 28,
-    fontWeight: "bold",
-    marginBottom: 20,
+    fontSize: 18,
+    fontWeight: "600",
     color: "#333",
+    flex: 1,
+    textAlign: "right",
   },
   scrollView: {
     flex: 1,
@@ -151,7 +183,7 @@ const styles = StyleSheet.create({
     height: 24,
     borderRadius: 4,
     borderWidth: 2,
-    borderColor: "#00b9b0",
+    borderColor: "#ff8173",
     marginRight: 16,
     justifyContent: "center",
     alignItems: "center",
@@ -160,7 +192,7 @@ const styles = StyleSheet.create({
     width: 14,
     height: 14,
     borderRadius: 2,
-    backgroundColor: "#00b9b0",
+    backgroundColor: "#ff8173",
   },
   exerciseInfo: {
     flex: 1,
