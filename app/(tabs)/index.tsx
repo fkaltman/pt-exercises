@@ -12,36 +12,76 @@ import {
 const STORAGE_KEY = "@exercises";
 
 const initialExercises = [
-  { id: 1, name: "Reverse Kegels", reps: "3 sets of 15", completed: false },
+  {
+    id: 1,
+    name: "Reverse Kegels",
+    reps: "3 sets of 15",
+    completed: false,
+    frequency: "daily",
+  },
   {
     id: 2,
     name: "Child's Pose Breathing",
     reps: "3 sets of 20",
     completed: false,
+    frequency: "daily",
   },
   {
     id: 3,
     name: "Donkey Kicks",
     reps: "3 sets of 30 seconds",
     completed: false,
+    frequency: "daily",
   },
   {
     id: 4,
     name: "Lumbar Wall Slide",
     reps: "3 sets of 10 each leg",
     completed: false,
+    frequency: "daily",
   },
-  { id: 5, name: "everyother1", reps: "3 sets of 30", completed: false },
-  { id: 6, name: "Burpees", reps: "3 sets of 10", completed: false },
+  {
+    id: 5,
+    name: "everyother1",
+    reps: "3 sets of 30",
+    completed: false,
+    frequency: "even",
+  },
+  {
+    id: 6,
+    name: "Burpees",
+    reps: "3 sets of 10",
+    completed: false,
+    frequency: "even",
+  },
   {
     id: 7,
     name: "everyother2",
     reps: "3 sets of 20",
     completed: false,
+    frequency: "even",
   },
-  { id: 8, name: "everyother3", reps: "3 sets of 15", completed: false },
-  { id: 9, name: "everyother4", reps: "3 sets of 15", completed: false },
-  { id: 10, name: "everyother5", reps: "3 sets of 15", completed: false },
+  {
+    id: 8,
+    name: "everyother3",
+    reps: "3 sets of 15",
+    completed: false,
+    frequency: "even",
+  },
+  {
+    id: 9,
+    name: "everyother4",
+    reps: "3 sets of 15",
+    completed: false,
+    frequency: "even",
+  },
+  {
+    id: 10,
+    name: "everyother5",
+    reps: "3 sets of 15",
+    completed: false,
+    frequency: "even",
+  },
 ];
 
 const index = () => {
@@ -55,6 +95,13 @@ const index = () => {
       year: "2-digit",
     });
   };
+
+  const isEvenDay = () => {
+    return new Date().getDate() % 2 === 0;
+  };
+
+  const dailyExercises = exercises.filter((ex) => ex.frequency === "daily");
+  const evenDayExercises = exercises.filter((ex) => ex.frequency === "even");
 
   // Load exercises from storage on mount
   useEffect(() => {
@@ -119,7 +166,9 @@ const index = () => {
         )}
       </View>
       <ScrollView style={styles.scrollView}>
-        {exercises.map((exercise) => (
+        {/* Daily Exercises Section */}
+        <Text style={styles.sectionHeader}>Daily Exercises</Text>
+        {dailyExercises.map((exercise) => (
           <TouchableOpacity
             key={exercise.id}
             style={styles.exerciseItem}
@@ -148,6 +197,44 @@ const index = () => {
             </View>
           </TouchableOpacity>
         ))}
+
+        {/* Even Day Exercises Section - only show on even days */}
+        {isEvenDay() && (
+          <>
+            <Text style={styles.sectionHeader}>Even Day Exercises</Text>
+            {evenDayExercises.map((exercise) => (
+              <TouchableOpacity
+                key={exercise.id}
+                style={styles.exerciseItem}
+                onPress={() => toggleExercise(exercise.id)}
+              >
+                <View style={styles.checkbox}>
+                  {exercise.completed && (
+                    <View style={styles.checkboxChecked} />
+                  )}
+                </View>
+                <View style={styles.exerciseInfo}>
+                  <Text
+                    style={[
+                      styles.exerciseName,
+                      exercise.completed && styles.completedText,
+                    ]}
+                  >
+                    {exercise.name}
+                  </Text>
+                  <Text
+                    style={[
+                      styles.exerciseReps,
+                      exercise.completed && styles.completedText,
+                    ]}
+                  >
+                    {exercise.reps}
+                  </Text>
+                </View>
+              </TouchableOpacity>
+            ))}
+          </>
+        )}
       </ScrollView>
     </View>
   );
@@ -191,6 +278,15 @@ const styles = StyleSheet.create({
     fontSize: 12,
     fontWeight: "600",
     color: "#666",
+  },
+  sectionHeader: {
+    fontSize: 16,
+    fontWeight: "700",
+    color: "#333",
+    marginTop: 8,
+    marginBottom: 12,
+    textTransform: "uppercase",
+    letterSpacing: 0.5,
   },
   scrollView: {
     flex: 1,
