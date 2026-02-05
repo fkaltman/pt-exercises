@@ -31,15 +31,17 @@ const initialExercises = [
     reps: "3 sets of 10 each leg",
     completed: false,
   },
-  { id: 5, name: "Jumping Jacks", reps: "3 sets of 30", completed: false },
+  { id: 5, name: "everyother1", reps: "3 sets of 30", completed: false },
   { id: 6, name: "Burpees", reps: "3 sets of 10", completed: false },
   {
     id: 7,
-    name: "Mountain Climbers",
+    name: "everyother2",
     reps: "3 sets of 20",
     completed: false,
   },
-  { id: 8, name: "Bicycle Crunches", reps: "3 sets of 15", completed: false },
+  { id: 8, name: "everyother3", reps: "3 sets of 15", completed: false },
+  { id: 9, name: "everyother4", reps: "3 sets of 15", completed: false },
+  { id: 10, name: "everyother5", reps: "3 sets of 15", completed: false },
 ];
 
 const index = () => {
@@ -93,6 +95,15 @@ const index = () => {
     );
   };
 
+  const resetExercises = async () => {
+    try {
+      await AsyncStorage.removeItem(STORAGE_KEY);
+      setExercises(initialExercises);
+    } catch (error) {
+      console.error("Error resetting exercises:", error);
+    }
+  };
+
   return (
     <View style={styles.container}>
       <View style={styles.headerRow}>
@@ -101,6 +112,11 @@ const index = () => {
           style={styles.logo}
         />
         <Text style={styles.header}>{getCurrentDate()}</Text>
+        {__DEV__ && (
+          <TouchableOpacity onPress={resetExercises} style={styles.resetButton}>
+            <Text style={styles.resetButtonText}>Reset</Text>
+          </TouchableOpacity>
+        )}
       </View>
       <ScrollView style={styles.scrollView}>
         {exercises.map((exercise) => (
@@ -161,6 +177,20 @@ const styles = StyleSheet.create({
     color: "#333",
     flex: 1,
     textAlign: "right",
+  },
+  resetButton: {
+    marginLeft: 12,
+    paddingHorizontal: 10,
+    paddingVertical: 6,
+    borderRadius: 6,
+    backgroundColor: "#ffffff",
+    borderWidth: 1,
+    borderColor: "#e0e0e0",
+  },
+  resetButtonText: {
+    fontSize: 12,
+    fontWeight: "600",
+    color: "#666",
   },
   scrollView: {
     flex: 1,
