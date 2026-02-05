@@ -18,6 +18,8 @@ const initialExercises = [
     reps: "3 sets of 15",
     completed: false,
     frequency: "daily",
+    sets: 3,
+    completedSets: [false, false, false],
   },
   {
     id: 2,
@@ -25,6 +27,8 @@ const initialExercises = [
     reps: "3 sets of 20",
     completed: false,
     frequency: "daily",
+    sets: 3,
+    completedSets: [false, false, false],
   },
   {
     id: 3,
@@ -32,6 +36,8 @@ const initialExercises = [
     reps: "3 sets of 30 seconds",
     completed: false,
     frequency: "daily",
+    sets: 1,
+    completedSets: [false],
   },
   {
     id: 4,
@@ -39,6 +45,8 @@ const initialExercises = [
     reps: "3 sets of 10 each leg",
     completed: false,
     frequency: "daily",
+    sets: 1,
+    completedSets: [false],
   },
   {
     id: 5,
@@ -46,6 +54,8 @@ const initialExercises = [
     reps: "3 sets of 30",
     completed: false,
     frequency: "even",
+    sets: 1,
+    completedSets: [false],
   },
   {
     id: 6,
@@ -53,6 +63,8 @@ const initialExercises = [
     reps: "3 sets of 10",
     completed: false,
     frequency: "even",
+    sets: 1,
+    completedSets: [false],
   },
   {
     id: 7,
@@ -60,6 +72,8 @@ const initialExercises = [
     reps: "3 sets of 20",
     completed: false,
     frequency: "even",
+    sets: 1,
+    completedSets: [false],
   },
   {
     id: 8,
@@ -67,6 +81,8 @@ const initialExercises = [
     reps: "3 sets of 15",
     completed: false,
     frequency: "even",
+    sets: 1,
+    completedSets: [false],
   },
   {
     id: 9,
@@ -74,6 +90,8 @@ const initialExercises = [
     reps: "3 sets of 15",
     completed: false,
     frequency: "even",
+    sets: 1,
+    completedSets: [false],
   },
   {
     id: 10,
@@ -81,6 +99,8 @@ const initialExercises = [
     reps: "3 sets of 15",
     completed: false,
     frequency: "even",
+    sets: 1,
+    completedSets: [false],
   },
 ];
 
@@ -142,6 +162,24 @@ const index = () => {
     );
   };
 
+  const toggleSet = (id: number, setIndex: number) => {
+    setExercises(
+      exercises.map((exercise) => {
+        if (exercise.id === id) {
+          const newCompletedSets = [...exercise.completedSets];
+          newCompletedSets[setIndex] = !newCompletedSets[setIndex];
+          const allCompleted = newCompletedSets.every((set) => set === true);
+          return {
+            ...exercise,
+            completedSets: newCompletedSets,
+            completed: allCompleted,
+          };
+        }
+        return exercise;
+      }),
+    );
+  };
+
   const resetExercises = async () => {
     try {
       await AsyncStorage.removeItem(STORAGE_KEY);
@@ -153,12 +191,11 @@ const index = () => {
 
   return (
     <View style={styles.container}>
-      <View style={styles.headerRow}>
+      <View style={styles.logoContainer}>
         <Image
           source={require("../../assets/images/pelvic_power_logo.webp")}
           style={styles.logo}
         />
-        <Text style={styles.header}>{getCurrentDate()}</Text>
         {__DEV__ && (
           <TouchableOpacity onPress={resetExercises} style={styles.resetButton}>
             <Text style={styles.resetButtonText}>Reset</Text>
@@ -167,15 +204,22 @@ const index = () => {
       </View>
       <ScrollView style={styles.scrollView}>
         {/* Daily Exercises Section */}
-        <Text style={styles.sectionHeader}>Daily Exercises</Text>
+        <View style={styles.sectionHeaderRow}>
+          <Text style={styles.sectionHeader}>Daily Exercises</Text>
+          <Text style={styles.dateText}>{getCurrentDate()}</Text>
+        </View>
         {dailyExercises.map((exercise) => (
-          <TouchableOpacity
-            key={exercise.id}
-            style={styles.exerciseItem}
-            onPress={() => toggleExercise(exercise.id)}
-          >
-            <View style={styles.checkbox}>
-              {exercise.completed && <View style={styles.checkboxChecked} />}
+          <View key={exercise.id} style={styles.exerciseItem}>
+            <View style={styles.checkboxContainer}>
+              {exercise.completedSets.map((isCompleted, index) => (
+                <TouchableOpacity
+                  key={index}
+                  style={styles.checkbox}
+                  onPress={() => toggleSet(exercise.id, index)}
+                >
+                  {isCompleted && <View style={styles.checkboxChecked} />}
+                </TouchableOpacity>
+              ))}
             </View>
             <View style={styles.exerciseInfo}>
               <Text
@@ -195,7 +239,7 @@ const index = () => {
                 {exercise.reps}
               </Text>
             </View>
-          </TouchableOpacity>
+          </View>
         ))}
 
         {/* Even Day Exercises Section - only show on even days */}
@@ -203,15 +247,17 @@ const index = () => {
           <>
             <Text style={styles.sectionHeader}>Even Day Exercises</Text>
             {evenDayExercises.map((exercise) => (
-              <TouchableOpacity
-                key={exercise.id}
-                style={styles.exerciseItem}
-                onPress={() => toggleExercise(exercise.id)}
-              >
-                <View style={styles.checkbox}>
-                  {exercise.completed && (
-                    <View style={styles.checkboxChecked} />
-                  )}
+              <View key={exercise.id} style={styles.exerciseItem}>
+                <View style={styles.checkboxContainer}>
+                  {exercise.completedSets.map((isCompleted, index) => (
+                    <TouchableOpacity
+                      key={index}
+                      style={styles.checkbox}
+                      onPress={() => toggleSet(exercise.id, index)}
+                    >
+                      {isCompleted && <View style={styles.checkboxChecked} />}
+                    </TouchableOpacity>
+                  ))}
                 </View>
                 <View style={styles.exerciseInfo}>
                   <Text
@@ -231,7 +277,7 @@ const index = () => {
                     {exercise.reps}
                   </Text>
                 </View>
-              </TouchableOpacity>
+              </View>
             ))}
           </>
         )}
@@ -247,26 +293,18 @@ const styles = StyleSheet.create({
     paddingTop: 20,
     paddingHorizontal: 20,
   },
-  headerRow: {
-    flexDirection: "row",
+  logoContainer: {
     alignItems: "center",
-    justifyContent: "space-between",
     marginBottom: 16,
   },
   logo: {
-    width: 48,
-    height: 40,
-    marginRight: 12,
-  },
-  header: {
-    fontSize: 18,
-    fontWeight: "600",
-    color: "#333",
-    flex: 1,
-    textAlign: "right",
+    width: 60,
+    height: 50,
   },
   resetButton: {
-    marginLeft: 12,
+    position: "absolute",
+    top: 10,
+    right: 10,
     paddingHorizontal: 10,
     paddingVertical: 6,
     borderRadius: 6,
@@ -279,14 +317,26 @@ const styles = StyleSheet.create({
     fontWeight: "600",
     color: "#666",
   },
+  sectionHeaderRow: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    marginTop: 8,
+    marginBottom: 12,
+    marginLeft: 6,
+    marginRight: 6,
+  },
   sectionHeader: {
     fontSize: 16,
     fontWeight: "700",
     color: "#333",
-    marginTop: 8,
-    marginBottom: 12,
     textTransform: "uppercase",
     letterSpacing: 0.5,
+  },
+  dateText: {
+    fontSize: 14,
+    fontWeight: "600",
+    color: "#666",
   },
   scrollView: {
     flex: 1,
@@ -304,13 +354,19 @@ const styles = StyleSheet.create({
     shadowRadius: 2,
     elevation: 2,
   },
+  checkboxContainer: {
+    flexDirection: "row",
+    marginRight: 16,
+    gap: 4,
+    width: 68,
+    justifyContent: "flex-end",
+  },
   checkbox: {
-    width: 24,
-    height: 24,
+    width: 20,
+    height: 20,
     borderRadius: 4,
     borderWidth: 2,
     borderColor: "#ff8173",
-    marginRight: 16,
     justifyContent: "center",
     alignItems: "center",
   },
