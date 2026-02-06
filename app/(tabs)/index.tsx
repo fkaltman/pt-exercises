@@ -41,17 +41,17 @@ const initialExercises = [
   },
   {
     id: 4,
-    name: "Lumbar Wall Slide",
-    reps: "3 sets of 10 each leg",
+    name: "Single Leg Bridge 12lbs",
+    reps: "3 sets of 8 each leg",
     completed: false,
-    frequency: "daily",
+    frequency: "even",
     sets: 1,
     completedSets: [false],
   },
   {
     id: 5,
-    name: "everyother1",
-    reps: "3 sets of 30",
+    name: "Superman",
+    reps: "5x (hold for 10 seconds)",
     completed: false,
     frequency: "even",
     sets: 1,
@@ -59,8 +59,8 @@ const initialExercises = [
   },
   {
     id: 6,
-    name: "Burpees",
-    reps: "3 sets of 10",
+    name: "Step up",
+    reps: "3 sets of 8 each leg",
     completed: false,
     frequency: "even",
     sets: 1,
@@ -68,35 +68,8 @@ const initialExercises = [
   },
   {
     id: 7,
-    name: "everyother2",
-    reps: "3 sets of 20",
-    completed: false,
-    frequency: "even",
-    sets: 1,
-    completedSets: [false],
-  },
-  {
-    id: 8,
-    name: "everyother3",
-    reps: "3 sets of 15",
-    completed: false,
-    frequency: "even",
-    sets: 1,
-    completedSets: [false],
-  },
-  {
-    id: 9,
-    name: "everyother4",
-    reps: "3 sets of 15",
-    completed: false,
-    frequency: "even",
-    sets: 1,
-    completedSets: [false],
-  },
-  {
-    id: 10,
-    name: "everyother5",
-    reps: "3 sets of 15",
+    name: "Squats with 20lbs",
+    reps: "3 sets of 8 each leg",
     completed: false,
     frequency: "even",
     sets: 1,
@@ -245,7 +218,9 @@ const index = () => {
         {/* Even Day Exercises Section - only show on even days */}
         {isEvenDay() && (
           <>
-            <Text style={styles.sectionHeader}>Even Day Exercises</Text>
+            <View style={styles.sectionHeaderRow}>
+              <Text style={styles.sectionHeader}>Every Other Day Exercises</Text>
+            </View>
             {evenDayExercises.map((exercise) => (
               <View key={exercise.id} style={styles.exerciseItem}>
                 <View style={styles.checkboxContainer}>
